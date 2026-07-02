@@ -1,0 +1,5 @@
+Put these image files in this folder:
+1. jata-negara.png
+2. school-logo.png
+Optional:
+3. school-bg.jpg

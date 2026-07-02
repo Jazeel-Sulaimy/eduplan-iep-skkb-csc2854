@@ -1,0 +1,83 @@
+IEP SKKB WORKFLOW UPDATE - CHANGED FILE MANIFEST
+==================================================
+
+MODIFIED FILES
+--------------
+- .env.example
+- app/Http/Controllers/AuthController.php
+- app/Http/Controllers/BehaviourRecordController.php
+- app/Http/Controllers/ConsentLetterController.php
+- app/Http/Controllers/ConsultationController.php
+- app/Http/Controllers/DashboardController.php
+- app/Http/Controllers/IEPGoalController.php
+- app/Http/Controllers/IEPReviewController.php
+- app/Http/Controllers/MockupPageController.php
+- app/Http/Controllers/ProgressRecordController.php
+- app/Http/Controllers/ReportController.php
+- app/Http/Controllers/StudentController.php
+- app/Http/Controllers/UserController.php
+- app/Models/Student.php
+- app/Models/User.php
+- bootstrap/app.php
+- database/database.sqlite
+- database/factories/UserFactory.php
+- database/seeders/DatabaseSeeder.php
+- lang/en/messages.php
+- lang/ms/messages.php
+- public/assets/css/style.css
+- resources/views/auth/login.blade.php
+- resources/views/behaviours/form.blade.php
+- resources/views/consents/form.blade.php
+- resources/views/consents/index.blade.php
+- resources/views/consultations/form.blade.php
+- resources/views/consultations/index.blade.php
+- resources/views/dashboard.blade.php
+- resources/views/goals/form.blade.php
+- resources/views/goals/index.blade.php
+- resources/views/layouts/app.blade.php
+- resources/views/partials/iep-status-table.blade.php
+- resources/views/partials/mockup-header.blade.php
+- resources/views/progress/form.blade.php
+- resources/views/progress/index.blade.php
+- resources/views/reports/index.blade.php
+- resources/views/reviews/form.blade.php
+- resources/views/reviews/index.blade.php
+- resources/views/students/assign.blade.php
+- resources/views/students/form.blade.php
+- resources/views/students/index.blade.php
+- resources/views/students/show.blade.php
+- resources/views/users/form.blade.php
+- resources/views/users/index.blade.php
+- routes/web.php
+
+NEW FILES
+---------
+- CHANGED_FILES.txt
+- IMPLEMENTATION_NOTES.md
+- VALIDATION_REPORT.txt
+- app/Http/Controllers/AssignmentController.php
+- app/Http/Controllers/ParentRegistrationController.php
+- app/Http/Controllers/ParentStudentController.php
+- app/Http/Controllers/TeacherStudentController.php
+- app/Http/Middleware/RoleMiddleware.php
+- app/Support/StudentAccess.php
+- database/database.sqlite.backup
+- database/factories/StudentFactory.php
+- database/migrations/2026_06_23_000011_add_parent_registration_fields_to_users_table.php
+- database/migrations/2026_06_23_000012_add_assignment_details_to_students_table.php
+- resources/views/auth/parent-register.blade.php
+- resources/views/parent/behaviour-index.blade.php
+- resources/views/parent/iep-index.blade.php
+- resources/views/parent/progress-index.blade.php
+- resources/views/parent/students/index.blade.php
+- resources/views/parent/students/show.blade.php
+- resources/views/teacher/students/index.blade.php
+- resources/views/teacher/students/show.blade.php
+- tests/Feature/RoleWorkflowTest.php
+
+REMOVED OBSOLETE FILES
+----------------------
+- tests/Feature/ExampleTest.php
+- tests/Unit/ExampleTest.php
+
+Summary: 46 modified, 22 new, 2 removed.

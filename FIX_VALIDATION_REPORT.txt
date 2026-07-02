@@ -1,0 +1,37 @@
+IEP SKKB PROJECT REPAIR VALIDATION
+==================================
+
+Completed checks:
+- Laravel application booted successfully (Laravel 12.62.0).
+- All PHP source files passed php -l syntax validation.
+- All 46 Blade templates compiled successfully.
+- 41 representative Blade screens rendered with sample users and records.
+- All registered routes point to existing controller methods.
+- Route list loaded successfully (87 application routes).
+- All named route references used by the application exist.
+- All English and Malay translation keys used by the application exist.
+- English and Malay translation files contain matching key sets.
+- All POST/PUT/PATCH/DELETE Blade forms contain CSRF protection.
+- No Markdown code fences remain inside PHP or Blade source files.
+- Profile upload directories and backup directories are included.
+- Project contains artisan and composer.json at the project root.
+
+Important fixes:
+- Removed the accidental ```php / ``` text from users/form.blade.php.
+- Fixed the undefined $roleOptions error on /users/create.
+- Restricted School Administrator account creation to Teacher, Counsellor and Parent roles.
+- Prevented School Administrators from editing System Administrator / School Administrator accounts.
+- Corrected notification model/controller table usage.
+- Added safe, unique profile-picture filenames and automatic upload-folder creation.
+- Added unique student-IC validation when registering/updating students.
+- Strengthened assignment validation and made assignment saving transactional.
+- Corrected date handling in forms after model date casting.
+- Rebuilt behaviour pages to use the correct behaviour_records columns.
+- Added a real cross-database JSON backup instead of a visual-only backup record.
+- Added missing English/Malay translations for the repaired pages.
+- Removed unused legacy controllers/models that referenced incorrect database columns.
+
+Environment limitation:
+- PHPUnit could not be executed in this repair container because its PHP build does not include PDO SQLite/MySQL, mbstring, DOM and XML extensions.
+- The included feature tests remain in tests/Feature/RoleWorkflowTest.php and should be run using XAMPP PHP 8.2:
+  php artisan test
