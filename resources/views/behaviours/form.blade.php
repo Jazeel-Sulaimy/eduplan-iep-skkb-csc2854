@@ -12,6 +12,11 @@
             — {{ __('messages.behaviour_status') }}
         </h2>
 
+        <div class="reward-auto-note">
+            <strong>{{ __('messages.automated_reward_calculation') }}</strong>
+            <span>{{ __('messages.reward_calculation_help') }}</span>
+        </div>
+
         @if($students->isEmpty())
             <div class="empty-state">{{ __('messages.no_students_assigned') }}</div>
         @else
@@ -54,36 +59,48 @@
                         @error('record_date')<div class="error">{{ $message }}</div>@enderror
                     </div>
 
-                    <div>
-                        <label for="behaviour_type">{{ __('messages.behaviour_type') }}</label>
-                        <select class="select" id="behaviour_type" name="behaviour_type" required>
-                            @foreach([
-                                'Positive' => __('messages.positive'),
-                                'Negative' => __('messages.negative'),
-                                'Neutral' => __('messages.neutral'),
-                            ] as $value => $label)
+                    <div class="full">
+                        <label for="reward_rule">{{ __('messages.behaviour_reward_rule') }}</label>
+                        <select class="select" id="reward_rule" name="reward_rule" required>
+                            <option value="">{{ __('messages.select_behaviour_action') }}</option>
+                            @foreach($rewardRules as $key => $rule)
                                 <option
-                                    value="{{ $value }}"
-                                    {{ old('behaviour_type', $behaviour->behaviour_type ?? 'Positive') === $value ? 'selected' : '' }}
+                                    value="{{ $key }}"
+                                    data-type="{{ $rule['type'] }}"
+                                    data-type-label="{{ __('messages.' . strtolower($rule['type'])) }}"
+                                    data-points="{{ $rule['points'] }}"
+                                    {{ $selectedRewardRule === $key ? 'selected' : '' }}
                                 >
-                                    {{ $label }}
+                                    {{ __($rule['label_key']) }}
+                                    ({{ $rule['points'] > 0 ? '+' : '' }}{{ $rule['points'] }} {{ __('messages.points') }})
                                 </option>
                             @endforeach
                         </select>
-                        @error('behaviour_type')<div class="error">{{ $message }}</div>@enderror
+                        @error('reward_rule')<div class="error">{{ $message }}</div>@enderror
                     </div>
 
                     <div>
-                        <label for="points">{{ __('messages.points') }}</label>
+                        <label for="calculated_behaviour_type">{{ __('messages.behaviour_type') }}</label>
                         <input
-                            class="input"
-                            type="number"
-                            id="points"
-                            name="points"
-                            value="{{ old('points', $behaviour->points ?? 0) }}"
-                            required
+                            class="input reward-readonly"
+                            type="text"
+                            id="calculated_behaviour_type"
+                            value=""
+                            readonly
+                            aria-readonly="true"
                         >
-                        @error('points')<div class="error">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div>
+                        <label for="calculated_points">{{ __('messages.automatically_calculated_points') }}</label>
+                        <input
+                            class="input reward-readonly"
+                            type="text"
+                            id="calculated_points"
+                            value=""
+                            readonly
+                            aria-readonly="true"
+                        >
                     </div>
 
                     <div class="full">
@@ -108,4 +125,29 @@
         @endif
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const rewardSelect = document.getElementById('reward_rule');
+    const typeField = document.getElementById('calculated_behaviour_type');
+    const pointsField = document.getElementById('calculated_points');
+
+    if (!rewardSelect || !typeField || !pointsField) {
+        return;
+    }
+
+    function updateCalculatedReward() {
+        const selected = rewardSelect.options[rewardSelect.selectedIndex];
+        const points = Number(selected.dataset.points || 0);
+
+        typeField.value = selected.dataset.typeLabel || '-';
+        pointsField.value = selected.value
+            ? `${points > 0 ? '+' : ''}${points} {{ __('messages.points') }}`
+            : '-';
+    }
+
+    rewardSelect.addEventListener('change', updateCalculatedReward);
+    updateCalculatedReward();
+});
+</script>
 @endsection

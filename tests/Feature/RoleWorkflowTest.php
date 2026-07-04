@@ -234,4 +234,106 @@ class RoleWorkflowTest extends TestCase
             'progress_notes' => 'Unauthorized record attempt.',
         ]);
     }
+
+    public function test_reward_points_are_calculated_automatically_from_selected_rule(): void
+    {
+        $teacher = User::factory()->teacher()->create();
+        $student = Student::factory()->create(['teacher_id' => $teacher->id]);
+
+        $response = $this->actingAs($teacher)->post(route('behaviours.store'), [
+            'student_id' => $student->id,
+            'record_date' => now()->format('Y-m-d'),
+            'reward_rule' => 'completed_goal',
+            'description' => 'Student completed the assigned learning goal.',
+            'behaviour_type' => 'Negative',
+            'points' => 999,
+        ]);
+
+        $response->assertRedirect(route('behaviours.index'));
+        $this->assertDatabaseHas('behaviour_records', [
+            'student_id' => $student->id,
+            'reward_rule' => 'completed_goal',
+            'behaviour_type' => 'Positive',
+            'points' => 10,
+        ]);
+    }
+
+    public function test_negative_reward_rule_automatically_applies_point_deduction(): void
+    {
+        $teacher = User::factory()->teacher()->create();
+        $student = Student::factory()->create(['teacher_id' => $teacher->id]);
+
+        $this->actingAs($teacher)->post(route('behaviours.store'), [
+            'student_id' => $student->id,
+            'record_date' => now()->format('Y-m-d'),
+            'reward_rule' => 'aggressive_behaviour',
+            'description' => 'Student displayed aggressive behaviour during class.',
+        ])->assertRedirect(route('behaviours.index'));
+
+        $this->assertDatabaseHas('behaviour_records', [
+            'student_id' => $student->id,
+            'reward_rule' => 'aggressive_behaviour',
+            'behaviour_type' => 'Negative',
+            'points' => -10,
+        ]);
+    }
+
+    public function test_invalid_reward_rule_is_rejected(): void
+    {
+        $teacher = User::factory()->teacher()->create();
+        $student = Student::factory()->create(['teacher_id' => $teacher->id]);
+
+        $response = $this->from(route('behaviours.create'))
+            ->actingAs($teacher)
+            ->post(route('behaviours.store'), [
+                'student_id' => $student->id,
+                'record_date' => now()->format('Y-m-d'),
+                'reward_rule' => 'manual_100_points',
+                'description' => 'Attempt to submit an invalid reward rule.',
+            ]);
+
+        $response->assertRedirect(route('behaviours.create'));
+        $response->assertSessionHasErrors('reward_rule');
+        $this->assertDatabaseMissing('behaviour_records', [
+            'student_id' => $student->id,
+            'description' => 'Attempt to submit an invalid reward rule.',
+        ]);
+    }
+
+    public function test_parent_reward_summary_only_displays_their_own_child(): void
+    {
+        $parent = User::factory()->parent()->create();
+        $otherParent = User::factory()->parent()->create();
+        $ownChild = Student::factory()->create([
+            'parent_user_id' => $parent->id,
+            'student_name' => 'Own Reward Child',
+        ]);
+        $otherChild = Student::factory()->create([
+            'parent_user_id' => $otherParent->id,
+            'student_name' => 'Other Reward Child',
+        ]);
+
+        $ownChild->behaviours()->create([
+            'record_date' => now(),
+            'behaviour_type' => 'Positive',
+            'reward_rule' => 'helped_others',
+            'description' => 'Helped a classmate.',
+            'points' => 5,
+        ]);
+
+        $otherChild->behaviours()->create([
+            'record_date' => now(),
+            'behaviour_type' => 'Positive',
+            'reward_rule' => 'completed_goal',
+            'description' => 'Completed a goal.',
+            'points' => 10,
+        ]);
+
+        $response = $this->actingAs($parent)->get(route('rewards.index'));
+
+        $response->assertOk();
+        $response->assertSee('Own Reward Child');
+        $response->assertDontSee('Other Reward Child');
+    }
+
 }

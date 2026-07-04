@@ -46,7 +46,8 @@
             <h3>{{ __('messages.behaviour_summary') }}</h3>
             @forelse($student->behaviours as $record)
                 <div class="record-card">
-                    <strong>{{ $record->behaviour_type }} ({{ $record->points }} {{ __('messages.points') }})</strong>
+                    <strong>{{ $record->rewardLabel() }} ({{ $record->signedPoints() }} {{ __('messages.points') }})</strong>
+                    <p>{{ $record->behaviourTypeLabel() }}</p>
                     <p>{{ $record->description }}</p>
                     <small>{{ $record->record_date }}</small>
                 </div>

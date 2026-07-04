@@ -17,10 +17,10 @@ use App\Http\Controllers\ParentStudentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgressRecordController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RewardController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherStudentController;
 use App\Http\Controllers\UserController;
-use App\Models\Student;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -195,6 +195,17 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:parent')->group(function () {
         Route::resource('consents', ConsentLetterController::class);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Automated Reward Calculation (FR8)
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware('role:school_admin,teacher,counsellor,parent')->group(function () {
+        Route::get('/rewards', [RewardController::class, 'index'])
+            ->name('rewards.index');
     });
 
     /*

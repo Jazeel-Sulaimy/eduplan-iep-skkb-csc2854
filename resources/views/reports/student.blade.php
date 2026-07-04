@@ -39,16 +39,18 @@
     <table class="table">
         <tr>
             <th>Date</th>
+            <th>Behaviour Action</th>
             <th>Type</th>
             <th>Description</th>
             <th>Points</th>
         </tr>
         @foreach($student->behaviours as $b)
         <tr>
-            <td>{{ $b->behaviour_date }}</td>
-            <td>{{ $b->behaviour_type }}</td>
+            <td>{{ optional($b->record_date)->format('d/m/Y') }}</td>
+            <td>{{ $b->rewardLabel() }}</td>
+            <td>{{ $b->behaviourTypeLabel() }}</td>
             <td>{{ $b->description }}</td>
-            <td>{{ $b->points }}</td>
+            <td>{{ $b->signedPoints() }}</td>
         </tr>
         @endforeach
     </table>

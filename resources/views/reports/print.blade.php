@@ -36,6 +36,22 @@
                 <p>-</p>
             @endforelse
 
+            <h2>{{ __('messages.automated_reward_calculation') }}</h2>
+            <p>
+                <strong>{{ __('messages.total_points') }}:</strong>
+                {{ $student->behaviours->sum('points') > 0 ? '+' : '' }}{{ $student->behaviours->sum('points') }}
+            </p>
+            @forelse($student->behaviours as $record)
+                <p>
+                    <strong>{{ optional($record->record_date)->format('d/m/Y') }} — {{ $record->rewardLabel() }}:</strong>
+                    {{ $record->signedPoints() }} {{ __('messages.points') }}
+                    ({{ $record->behaviourTypeLabel() }})
+                    — {{ $record->description }}
+                </p>
+            @empty
+                <p>{{ __('messages.no_behaviour_records') }}</p>
+            @endforelse
+
             <h2>{{ __('messages.counsellor_review') }}</h2>
             @forelse($student->consultations as $case)
                 <p><strong>{{ $case->case_title }}:</strong> {{ $case->consultation_notes }}</p>

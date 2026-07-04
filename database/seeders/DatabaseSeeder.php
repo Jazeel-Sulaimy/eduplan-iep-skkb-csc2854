@@ -106,7 +106,8 @@ class DatabaseSeeder extends Seeder
                 'student_id' => $student->id,
                 'record_date' => now(),
                 'behaviour_type' => 'Positive',
-                'description' => 'Student participated in class activity.',
+                'reward_rule' => 'helped_others',
+                'description' => 'Student participated in class activity and helped classmates.',
                 'points' => 5,
                 'recorded_by' => $teacher->id,
             ]);

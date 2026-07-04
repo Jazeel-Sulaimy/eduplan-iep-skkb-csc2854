@@ -1,93 +1,82 @@
-# IEP Management System SK Kuala Berang
+# EduPlan – IEP Management System SKKB
 
-This is a Laravel starter system for a diploma final project.
+EduPlan is a web-based Individual Education Plan Management System
+developed for Sekolah Kebangsaan Kuala Berang as a CSC2854 Final Year
+Project.
 
-## Technology
-- Frontend: Blade, HTML, CSS, basic JavaScript
-- Backend: Laravel / PHP
-- Database: MySQL
-- Server: XAMPP / Laravel artisan server
-- Editor: Visual Studio Code
+## Technologies
 
-## Setup Steps
+- Laravel 12
+- PHP 8.2
+- Blade
+- HTML5
+- CSS3
+- Basic JavaScript
+- MySQL / MariaDB
+- SQLite compatible
+- XAMPP
+- Composer
 
-1. Create a fresh Laravel project:
+## Main Roles
 
-```bash
-composer create-project laravel/laravel iep_skkb
-cd iep_skkb
-```
+- School Administrator
+- Teacher
+- Counsellor
+- Parent / Guardian
+- System Administrator
 
-2. Create an empty MySQL database in phpMyAdmin:
+## XAMPP Installation
 
-```text
-iep_skkb
-```
+1. Install XAMPP with PHP 8.2.
+2. Start MySQL from the XAMPP Control Panel.
+3. Clone the repository into:
 
-3. Update `.env`:
+   C:\xampp\htdocs\IEP_SKKB
 
-```env
-DB_DATABASE=iep_skkb
-DB_USERNAME=root
-DB_PASSWORD=
-```
+4. Open the project folder in Visual Studio Code.
+5. Install PHP dependencies:
 
-4. Copy these folders/files from this package into your Laravel project and replace existing files:
+   composer install
 
-```text
-app
-routes
-database
-resources
-public
-README.md
-```
+6. Copy the environment file:
 
-5. Run:
+   copy .env.example .env
 
-```bash
-php artisan optimize:clear
-php artisan migrate:fresh --seed
-php artisan serve
-```
+7. Generate the application key:
 
-6. Open:
+   php artisan key:generate
 
-```text
-http://127.0.0.1:8000
-```
+8. Create a MySQL database named:
 
-## Demo Login
+   iep_skkb
 
-```text
-ADMIN001 / 12345
-TEACHER001 / 12345
-COUNSELLOR001 / 12345
-PARENT001 / 12345
-SYSADMIN001 / 12345
-```
+9. Configure `.env`:
 
-## Image Setup
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=iep_skkb
+   DB_USERNAME=root
+   DB_PASSWORD=
 
-Put your real images in:
+10. Import `database/sql/iep_skkb_demo.sql` through phpMyAdmin,
+    or run:
 
-```text
-public/assets/images/jata-negara.png
-public/assets/images/school-logo.png
-public/assets/images/school-bg.jpg
-```
+    php artisan migrate --seed
 
-## Main Modules
-- Login by User ID
-- Role-based dashboard
-- Student Profile
-- Manage Users
-- IEP Form / Goals
-- Behaviour and Reward Points
-- Progress Status
-- Student Case and Consultation
-- IEP Review
-- Parent Consent Letter
-- Generate Printable Report
-- Backup Log
-- Profile Picture Upload
+11. Clear Laravel cache:
+
+    php artisan optimize:clear
+
+12. Start the Laravel server:
+
+    php artisan serve
+
+13. Open:
+
+    http://127.0.0.1:8000
+
+## Important Database Note
+
+Do not run `php artisan migrate:fresh` when the database contains
+important records because it removes all existing tables and data.
